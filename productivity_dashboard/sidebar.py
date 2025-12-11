@@ -1,19 +1,17 @@
 import customtkinter as ctk
-from .assets import load_icon
+from .assets import load_icon, change_icon_color
 
 class HoverButton(ctk.CTkButton):
     def __init__(self, *args, **kwargs):
-        self.normal_color = kwargs.pop("fg_color", "transparent")
-        self.hover_color = kwargs.pop("hover_color", "#151515")
-
         super().__init__(
             *args,
             **kwargs,
-            fg_color=self.normal_color,
-            corner_radius=12,
+            fg_color="transparent",
             border_width=0,
             hover=False
         )
+
+        self.icon = self.cget("image")
 
         #bind event to method :3
         self.bind("<Enter>", self.on_enter)
@@ -21,10 +19,12 @@ class HoverButton(ctk.CTkButton):
 
     #change colour to hover colour on mouseover/hover
     def on_enter(self, _):
-        self.configure(fg_color=self.hover_color)
+        new_icon = change_icon_color(self.icon, True)
+        self.configure(image=new_icon)
 
     def on_leave(self, _):
-        self.configure(fg_color=self.normal_color)
+        new_icon = change_icon_color(self.icon)
+        self.configure(image=new_icon)
 
 class Sidebar(ctk.CTkFrame):
     def __init__(self, parent, pages, menu, switch_page, *args, **kwargs):
@@ -39,6 +39,7 @@ class Sidebar(ctk.CTkFrame):
         self.FULL_WIDTH = 180
         self.CONDENSED_WIDTH = 60
         self.buttons = {}
+        self.indicators = {}
 
         #size of frame
         self.configure(width=self.FULL_WIDTH)
@@ -56,23 +57,39 @@ class Sidebar(ctk.CTkFrame):
 
         self.buttons[self.menu_config.name] = self.toggle_button
 
-        self.toggle_button.grid(row=0, column=0, sticky="ew", padx=8, pady=4)
+        self.toggle_button.grid(row=0, column=0, sticky="ew", padx=8, pady=4, columnspan=2)
 
         nav_items = [(page.name, page.icon, page.builder) for page in pages.values()]
 
         for i, (name, icon, builder) in enumerate(nav_items):
+            image = load_icon(icon, category="tabs")
+            
             nav_button = HoverButton(
                 self,
                 text = name,
-                image=load_icon(icon, category="tabs"),
+                image=image,
                 anchor="w",
                 #call switch page with the builder
-                command=lambda b=builder: self.switch_page(b),
+                command=lambda n=name, b=builder: self.switch_page(n, b)
             )
-            nav_button.grid(row=i + 1, column=0, sticky="ew", padx=8, pady=4)
+
+            border = ctk.CTkFrame(self, fg_color="transparent", width=4, height=20)
+            border.grid(row=i+1, column=0, sticky="e", padx=0)
+            self.indicators[name] = border
+            nav_button.grid(row=i+1, column=1)
             self.buttons[name] = nav_button
         
         self.rowconfigure(list(range(len(self.buttons))), weight=1)
+
+    def set_current_page(self, name):
+        for page, indicator in self.indicators.items():
+            if page == name:
+                indicator.configure(fg_color="#C8AA00")
+            else:
+                indicator.configure(fg_color="transparent")
+        
+        
+        
 
     def toggle(self):
         #switch states
