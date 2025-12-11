@@ -1,3 +1,10 @@
 */__pycache__/*
 assets/icons/ICONS TO GET.txt
 *.txt
+productivity_dashboard/pages/__pycache__/home.cpython-312.pyc
+productivity_dashboard/pages/__pycache__/links.cpython-312.pyc
+productivity_dashboard/pages/__pycache__/pomodoro.cpython-312.pyc
+productivity_dashboard/pages/__pycache__/reminders.cpython-312.pyc
+productivity_dashboard/pages/__pycache__/settings.cpython-312.pyc
+productivity_dashboard/pages/__pycache__/stats.cpython-312.pyc
+productivity_dashboard/pages/__pycache__/tasks.cpython-312.pyc
