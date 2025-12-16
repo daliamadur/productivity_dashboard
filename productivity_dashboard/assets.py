@@ -1,19 +1,27 @@
 from PIL import Image, ImageColor
 from customtkinter import CTkImage
 from pathlib import Path
+from dataclasses import dataclass
 import yaml
 
+@dataclass
+class IconPalette():
+    light: str
+    light_hover: str
+    dark: str
+    dark_hover: str
+
 class HoverImage(CTkImage):
-    def __init__(self, img, light_color, light_hover_color, dark_color, dark_hover_color, *args, **kwargs):
+    def __init__(self, light_color, light_hover_color, dark_color, dark_hover_color, palette, *args, **kwargs):
         super().__init__(
             *args,
             **kwargs
         )
-        self.img = img
         self.light_color = light_color
-        self.light_hover_color = light_hover_color 
+        self.light_hover_color = light_hover_color
         self.dark_color = dark_color
         self.dark_hover_color = dark_hover_color
+        self.palette = palette
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -58,31 +66,20 @@ def load_icon(name, size = 20, category=None):
     return HoverImage(light_image=recolor_image(img, icon_color_light), 
                     dark_image=recolor_image(img, icon_color_dark),
                     size=(size, size),
-                    light_color=icon_color_light,
-                    light_hover_color=icon_hover_color_light,
-                    dark_color=icon_color_dark,
-                    dark_hover_color=icon_hover_color_dark,
-                    img=img
+                    light_color = recolor_image(img, icon_color_light),
+                    light_hover_color = recolor_image(img, icon_hover_color_light),
+                    dark_color = recolor_image(img, icon_color_dark),
+                    dark_hover_color = recolor_image(img, icon_hover_color_dark),
+                    palette=IconPalette(
+                        light=icon_color_light,
+                        light_hover=icon_hover_color_light,
+                        dark=icon_color_dark,
+                        dark_hover=icon_hover_color_dark 
+                    )
                     )
 
 def change_icon_color(icon : HoverImage, hover=False):
-    size = icon.cget("size")
-
     light = icon.light_hover_color if hover else icon.light_color
-
     dark = icon.dark_hover_color if hover else icon.dark_color
-
-    new_dark_image = recolor_image(icon.img, dark)
-    new_light_image = recolor_image(icon.img, light)
-
-    return HoverImage(light_image = new_light_image,
-        dark_image = new_dark_image,
-        light_color=icon.light_color,
-        light_hover_color=icon.light_hover_color,
-        dark_color=icon.dark_color,
-        dark_hover_color=icon.dark_hover_color,
-        img=icon.img,
-        size=size
-        )
-
     
+    icon.configure(light_image=light, dark_image=dark)

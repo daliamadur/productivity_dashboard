@@ -1,9 +1,8 @@
-# configure hover colours
 menu:
   path: "assets/icons/menu_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
   light_color: "#3e3e3e"
   light_hover_color: "#1c1c1c"
-  dark_color: "#bbbbbb"
+  dark_color: "#888888"
   dark_hover_color: "#ffffff"
 
 tabs:
@@ -11,41 +10,41 @@ tabs:
     path: "assets/icons/home_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
     light_color: "#3e3e3e"
     light_hover_color: "#1c1c1c"
-    dark_color: "#bbbbbb"
+    dark_color: "#888888"
     dark_hover_color: "#ffffff"
   tasks:
     path: "assets/icons/checklist_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
     light_color: "#3e3e3e"
     light_hover_color: "#1c1c1c"
-    dark_color: "#bbbbbb"
+    dark_color: "#888888"
     dark_hover_color: "#ffffff"
   pomodoro:
     path: "assets/icons/alarm_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
     light_color: "#3e3e3e"
     light_hover_color: "#1c1c1c"
-    dark_color: "#bbbbbb"
+    dark_color: "#888888"
     dark_hover_color: "#ffffff"
   links:
     path: "assets/icons/link_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
     light_color: "#3e3e3e"
     light_hover_color: "#1c1c1c"
-    dark_color: "#bbbbbb"
+    dark_color: "#888888"
     dark_hover_color: "#ffffff"
   reminders:
     path: "assets/icons/notifications_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
     light_color: "#3e3e3e"
     light_hover_color: "#1c1c1c"
-    dark_color: "#bbbbbb"
+    dark_color: "#888888"
     dark_hover_color: "#ffffff"
   stats:
     path: "assets/icons/monitoring_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
     light_color: "#3e3e3e"
     light_hover_color: "#1c1c1c"
-    dark_color: "#bbbbbb"
+    dark_color: "#888888"
     dark_hover_color: "#ffffff"
   settings:  
     path: "assets/icons/settings_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
     light_color: "#3e3e3e"
     light_hover_color: "#1c1c1c"
-    dark_color: "#bbbbbb"
+    dark_color: "#888888"
     dark_hover_color: "#ffffff"
