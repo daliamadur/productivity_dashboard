@@ -73,7 +73,7 @@ class Sidebar(ctk.CTkFrame):
         #doesn't shrink to fit
         self.grid_propagate(False)
 
-        menu_image=load_icon(self.menu_config.icon)
+        menu_image=load_icon(self.menu_config.icon, hover_image=True)
 
         self.toggle_button = HoverButton(
             self,
@@ -93,7 +93,7 @@ class Sidebar(ctk.CTkFrame):
         nav_items = [(page.name, page.icon, page.builder) for page in pages.values()]
 
         for i, (name, icon, builder) in enumerate(nav_items):
-            image = load_icon(icon, category="tabs")
+            image = load_icon(icon, category="tabs", hover_image=True)
             
             nav_button = HoverButton(
                 self,
