@@ -8,3 +8,4 @@ productivity_dashboard/pages/__pycache__/reminders.cpython-312.pyc
 productivity_dashboard/pages/__pycache__/settings.cpython-312.pyc
 productivity_dashboard/pages/__pycache__/stats.cpython-312.pyc
 productivity_dashboard/pages/__pycache__/tasks.cpython-312.pyc
+test_window.py
