@@ -1,5 +1,8 @@
-from .assets import HoverImage, load_icon, change_icon_color
+from .assets import HoverImage, load_icon, change_icon_color, format_date, format_time, create_grid
 from .appstate import AppState
 from .tabs import MENU, PAGES
 from .sidebar import Sidebar
 from .animations import grow
+
+#for testing purposes
+from .pages.home import HomeTab as CurrentPage
