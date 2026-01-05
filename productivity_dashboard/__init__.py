@@ -1,4 +1,4 @@
-from .assets import HoverImage, load_icon, change_icon_color, format_date, format_time, create_grid
+from .utils import HoverImage, load_icon, change_icon_color, format_date, format_time, create_grid
 from .appstate import AppState
 from .tabs import MENU, PAGES
 from .sidebar import Sidebar
