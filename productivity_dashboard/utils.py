@@ -4,7 +4,7 @@ import yaml, requests
 from PIL import Image, ImageColor, ImageChops
 from dataclasses import dataclass
 from urllib.parse import urlparse
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from io import BytesIO
 from math import floor
@@ -262,6 +262,36 @@ def format_time(time : datetime):
     minute = time.minute
 
     return f"{hour:02}:{minute:02}"
+
+def format_duration(time : timedelta):
+    total = time.seconds
+
+    hours = total // 3600
+    minutes = (total // 60) % 60
+    seconds = total % 60
+
+    components = []
+    flags = []
+
+    if hours:
+        components.extend([str(hours), " hours" if hours > 1 else " hour"])
+        flags.append(True)
+    if minutes:
+        components.extend([str(minutes), " minutes" if minutes != 1 else " minute"])
+        flags.append(True)
+    if seconds:
+        components.extend([str(seconds), " seconds" if seconds != 1 else " second"])
+        flags.append(True)
+
+    #sentence builder
+    if len(flags) == 3:
+        components.insert(2, ", ")
+
+    if len(flags) > 1:
+        components.insert(-2, " and ")
+
+    return "".join(components)
+
 
 def format_pomodoro(time_remaining: int):
     #split into mins and seconds
