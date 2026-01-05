@@ -1,53 +1,6 @@
 import customtkinter as ctk
-from .assets import load_icon, change_icon_color
+from .utils import load_icon, HoverButton
 from .animations import grow
-
-class HoverButton(ctk.CTkButton):
-    def __init__(self, *args, **kwargs):
-        super().__init__(
-            *args,
-            **kwargs,
-            fg_color="transparent",
-            border_width=0,
-            hover=False
-        )
-
-        self.icon = self.cget("image")
-        self.selected = False
-
-        #bind event to method :3
-        self.bind("<Enter>", self.on_enter)
-        self.bind("<Leave>", self.on_leave)
-
-    #change colour to hover colour on mouseover/hover
-    def on_enter(self, _):
-        mode = ctk.get_appearance_mode()
-
-        if not self.selected:
-            change_icon_color(self.icon, True)
-            color = self.icon.palette.light_hover if mode == "Light" else self.icon.palette.dark_hover
-            self.configure(text_color=color)
-
-    def on_leave(self, _):
-        mode = ctk.get_appearance_mode()
-
-        if not self.selected:
-            change_icon_color(self.icon)
-            color = self.icon.palette.light if mode == "Light" else self.icon.palette.dark
-            self.configure(text_color=color)
-
-    def configure(self, **kwargs):
-        if "selected" in kwargs:
-            self.selected = kwargs.pop("selected")
-
-            if self.selected:
-                change_icon_color(self.icon, True)
-                self.configure(state=ctk.DISABLED)
-            else:
-                change_icon_color(self.icon)
-                self.configure(state=ctk.NORMAL)
-                
-        return super().configure(**kwargs)
 
 class Sidebar(ctk.CTkFrame):
     def __init__(self, parent, pages, menu, switch_page, *args, **kwargs):
