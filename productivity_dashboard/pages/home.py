@@ -1,4 +1,4 @@
-from ..utils import HyperLink, create_grid, format_date, format_time, load_icon, load_favicon
+from ..utils import HyperLink, create_grid, format_date, format_time, format_duration, load_icon, load_favicon
 from ..appstate import AppState
 from ..pomodoro_meter import PomodoroWheel
 import customtkinter as ctk
@@ -69,6 +69,25 @@ class HomeTab(ctk.CTkFrame):
         #COLUMN 3 - TASKS + REMINDERS
         self.tasks_reminder = ctk.CTkFrame(self, fg_color="#00FF11")
         self.tasks_reminder.grid(row=1, column=2, sticky="nesw")
+        create_grid(self.tasks_reminder, rows=[1, 5])
+        
+        #info for upcoming reminder
+        next_reminder = appstate.next_reminder
+        
+        #create frame for next reminder, place in section and split for icon + text
+        upcoming_reminder = ctk.CTkFrame(self.tasks_reminder, fg_color="#E6CD44")
+        upcoming_reminder.grid(row=0, column=0, sticky="ew")
+        create_grid(upcoming_reminder, columns=2)
+        
+        #get attrs
+        reminder_icon = load_icon("reminders", category="tabs")
+        reminder_text = f"{next_reminder.name} in {format_duration(next_reminder.time_until())}"
+        #put in frame
+        reminder_ctk_icon = ctk.CTkLabel(upcoming_reminder, text="", image=reminder_icon)
+        reminder_ctk_text = ctk.CTkLabel(upcoming_reminder, text=reminder_text)
+        reminder_ctk_icon.grid(row=0, column=0, sticky="ne", padx="2")
+        reminder_ctk_text.grid(row=0, column=1, sticky="nw", padx="2")
+        
         
     def callback(self, url):
         webbrowser.open_new(url)
