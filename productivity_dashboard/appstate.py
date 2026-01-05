@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from productivity_dashboard import PomodoroState, Link, Task, Reminder
+from .models import PomodoroState, Link, Task, Reminder
 
 @dataclass
 class AppState():
