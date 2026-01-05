@@ -30,7 +30,6 @@ class PomodoroMode(Enum):
                 return value['label']
             raise ValueError(f"No matching value for {value}")
             
-
 class PomodoroStatus(Enum):
     RUNNING = auto()
     PAUSED = auto()
