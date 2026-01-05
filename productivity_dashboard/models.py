@@ -4,9 +4,32 @@ from datetime import timedelta, datetime
 from typing import Optional
 
 class PomodoroMode(Enum):
-    WORK = auto()
-    SHORT_BREAK = auto()
-    LONG_BREAK = auto()
+    WORK = ("work", 25)
+    SHORT_BREAK = ("short break", 5)
+    LONG_BREAK = ("long break", 10)
+
+    @property
+    def duration(self):
+        return self.value[1] * 60
+
+    @property
+    def label(self):
+        return self.value[0]
+
+    @classmethod
+    def get_time(cls, value):
+        for member in cls:
+            if member == value:
+                return value['duration'] * 60
+        raise ValueError(f"No matching value for {value}")
+    
+    @classmethod
+    def get_label(cls, value):
+        for member in cls:
+            if member == value:
+                return value['label']
+            raise ValueError(f"No matching value for {value}")
+            
 
 class PomodoroStatus(Enum):
     RUNNING = auto()
