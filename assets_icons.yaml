@@ -1,3 +1,21 @@
+github:
+  light: "#1c1c1c"
+  dark: "#ffffff"
+
+broken:
+  path: "assets/icons/broken_image_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
+  light_color: "#3e3e3e"
+  light_hover_color: "#1c1c1c"
+  dark_color: "#888888"
+  dark_hover_color: "#ffffff"
+
+website:
+  path: "assets/icons/captive_portal_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
+  light_color: "#3e3e3e"
+  light_hover_color: "#1c1c1c"
+  dark_color: "#888888"
+  dark_hover_color: "#ffffff"
+
 menu:
   path: "assets/icons/menu_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png"
   light_color: "#3e3e3e"
