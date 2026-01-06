@@ -25,7 +25,10 @@ class Sidebar(ctk.CTkFrame):
         self.configure(width=self.CONDENSED_WIDTH)
         #doesn't shrink to fit
         self.grid_propagate(False)
+        self._build_sidebar(mode)
 
+
+    def _build_sidebar(self, mode):
         menu_image=load_icon(self.menu_config.icon, hover_image=True)
 
         self.toggle_button = HoverButton(
@@ -43,7 +46,7 @@ class Sidebar(ctk.CTkFrame):
 
         self.toggle_button.grid(row=0, column=0, sticky="ew", padx=8, pady=4, columnspan=2)
 
-        nav_items = [(page.name, page.icon, page.builder) for page in pages.values()]
+        nav_items = [(page.name, page.icon, page.builder) for page in self.pages.values()]
 
         for i, (name, icon, builder) in enumerate(nav_items):
             image = load_icon(icon, category="tabs", hover_image=True)
@@ -71,7 +74,6 @@ class Sidebar(ctk.CTkFrame):
         self.rowconfigure(list(range(len(self.buttons))), weight=1)
 
     def set_current_page(self, name):
-
         for (page, indicator), (_, button) in zip(self.indicators.items(), self.nav_buttons.items()):
             if page == name:
                 indicator.configure(fg_color="#C8AA00")

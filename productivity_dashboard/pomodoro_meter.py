@@ -7,7 +7,7 @@ class PomodoroWheel(ctk.CTkFrame):
         self.appearance_mode = ctk.get_appearance_mode()
 
         #for thickness and font size
-        scale = size / 160
+        self.scale = size / 160
 
         self.size = size
         self.thickness = thickness
@@ -17,11 +17,14 @@ class PomodoroWheel(ctk.CTkFrame):
         self.time = time
         self.mode = mode
 
+        self._build_pomodoro_wheel()
+
+    def _build_pomodoro_wheel(self):
         self.canvas = ctk.CTkCanvas(
             self,
-            width = size,
-            height = size,
-            bg = self.bg_color(),
+            width = self.size,
+            height = self.size,
+            bg = self._get_bg_color(),
             #border
             highlightthickness = 0
         )
@@ -32,7 +35,7 @@ class PomodoroWheel(ctk.CTkFrame):
         #oval - background
         self.bg_circle = self.canvas.create_oval(
             pad, pad,
-            size - pad, size - pad,
+            self.size - pad, self.size - pad,
             outline = "#3D3D3D" if self.appearance_mode == "Dark" else "#A9A9A9",
             width = self.thickness
         )
@@ -40,32 +43,44 @@ class PomodoroWheel(ctk.CTkFrame):
         #arc - progress
         self.arc = self.canvas.create_arc(
             pad, pad,
-            size - pad, size - pad,
+            self.size - pad, self.size - pad,
             start = 90,
             extent = 0,
             style = 'arc',
             outline = self.color,
-            width = thickness
+            width = self.thickness
         )
 
         offset = pad * 2.4
 
         #text - pomodoro mode
         self.pomodoro_mode = self.canvas.create_text(
-            (size - pad) / 2, ((size - pad) / 2) - offset,
+            (self.size - pad) / 2, ((self.size - pad) / 2) - offset,
             fill = '#DCE4EE' if self.appearance_mode == 'Dark' else '#1A1A1A',
-            font = ('Ubuntu', int(12 * scale)),
+            font = ('Ubuntu', int(12 * self.scale)),
             text = self.mode
         )
 
         #text - remaining time
         self.time_remaining = self.canvas.create_text(
-            (size - pad) / 2, ((size - pad) / 2) + offset,
+            (self.size - pad) / 2, ((self.size - pad) / 2) + offset,
             fill = '#DCE4EE' if self.appearance_mode == 'Dark' else '#1A1A1A',
-            font = ("Ubuntu", int(20 * scale), "bold"),
+            font = ("Ubuntu", int(20 * self.scale), "bold"),
             text = format_pomodoro(self.time)
         )
 
+    def _get_bg_color(self):
+        transparent = True
+        parent = self.master
+        color = None
+
+        while transparent:
+            color = parent.cget("fg_color")
+            transparent = color == 'transparent'
+            parent = parent.master
+
+        return color[0] if self.appearance_mode == 'Light' else color[1]
+        
     def set_progress(self, value: float):
         if value < 1:
             #ensure value is between 0 and 1
@@ -82,20 +97,6 @@ class PomodoroWheel(ctk.CTkFrame):
             extent = -360 * self.progress
         )
 
-    def bg_color(self):
-        transparent = True
-        parent = self.master
-        color = None
-
-        while transparent:
-            color = parent.cget("fg_color")
-            transparent = color == 'transparent'
-            parent = parent.master
-
-        print(self.appearance_mode)
-
-        return color[0] if self.appearance_mode == 'Light' else color[1]
-        
     def set_time(self, s_remaining: int):
         self.time = s_remaining
 
