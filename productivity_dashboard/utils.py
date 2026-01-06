@@ -1,5 +1,5 @@
 import customtkinter as ctk
-import yaml, requests
+import yaml, requests, webbrowser
 
 from PIL import Image, ImageColor, ImageChops
 from dataclasses import dataclass
@@ -188,6 +188,9 @@ def load_favicon(url: str, size: int) -> Image.Image | None:
     except:
         return None
 
+def callback(url):
+    webbrowser.open_new(url)
+
 def change_icon_color(icon : HoverImage, hover=False):
     light = icon.light_hover_color if hover else icon.light_color
     dark = icon.dark_hover_color if hover else icon.dark_color
@@ -292,7 +295,6 @@ def format_duration(time : timedelta):
 
     return "".join(components)
 
-
 def format_pomodoro(time_remaining: int):
     #split into mins and seconds
     m_remaining = floor(time_remaining / 60)
@@ -302,7 +304,6 @@ def format_pomodoro(time_remaining: int):
     return f"{m_remaining:02}:{s_remaining:02}"
 
 def create_grid(widget : ctk.CTkBaseClass, *, rows=None, columns=None, parent=True):
-    
     #number of rows - all even weight
     if isinstance(rows, int): 
         for row in range(rows):
