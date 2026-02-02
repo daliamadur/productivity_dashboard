@@ -271,7 +271,6 @@ def format_duration(time : timedelta):
 
     hours = total // 3600
     minutes = (total // 60) % 60
-    seconds = total % 60
 
     components = []
     flags = []
@@ -281,9 +280,6 @@ def format_duration(time : timedelta):
         flags.append(True)
     if minutes:
         components.extend([str(minutes), " minutes" if minutes != 1 else " minute"])
-        flags.append(True)
-    if seconds:
-        components.extend([str(seconds), " seconds" if seconds != 1 else " second"])
         flags.append(True)
 
     #sentence builder
@@ -303,9 +299,9 @@ def format_pomodoro(time_remaining: int):
     #format 00:00
     return f"{m_remaining:02}:{s_remaining:02}"
 
-def create_grid(widget : ctk.CTkBaseClass, *, rows=None, columns=None, parent=True):
+def create_grid(widget : ctk.CTkBaseClass, *, rows=None, columns=None, propagate=True):
     #number of rows - all even weight
-    if isinstance(rows, int): 
+    if isinstance(rows, int) : 
         for row in range(rows):
             widget.rowconfigure(row, weight=1)
     #list of row weights
@@ -328,8 +324,19 @@ def create_grid(widget : ctk.CTkBaseClass, *, rows=None, columns=None, parent=Tr
     if columns is None:
         widget.columnconfigure(0, weight=1)
 
-    #only child widgets should adjust size ? I think
-    if parent:
-        widget.grid_propagate(False)
-    else:
-        widget.grid_propagate(True)
+    #Top-level layout frames → propagate=False
+    #Content frames → propagate=True
+    widget.grid_propagate(propagate)
+
+def build_top_panel(name, parent, column_count=3):
+    heading = ctk.CTkFrame(parent, fg_color="transparent")
+    label = ctk.CTkLabel(heading, text=name, font=("Ubuntu", 36, "bold"), justify=ctk.CENTER)
+    label.pack(side=ctk.LEFT, fill="both", padx=48)
+    heading.grid(row=0, column=0, columnspan=column_count, sticky="nesw")
+
+def build_bottom_panel(parent, rows=1, columns=1):
+    body = ctk.CTkFrame(parent, fg_color="transparent")
+    body.grid(row=1, column=0, columnspan=3, sticky="nesw")
+    create_grid(body, rows=rows, columns=columns, propagate=False)
+
+    return body
