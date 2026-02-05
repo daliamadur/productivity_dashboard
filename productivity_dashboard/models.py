@@ -20,7 +20,7 @@ class PomodoroMode(Enum):
     def get_time(cls, value):
         for member in cls:
             if member == value:
-                return value['duration'] * 60
+                return value.duration * 60
         raise ValueError(f"No matching value for {value}")
     
     @classmethod

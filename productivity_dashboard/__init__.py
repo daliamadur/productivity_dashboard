@@ -8,4 +8,4 @@ from .models import *
 from .storage import *
 
 #for testing purposes
-from .pages.tasks import TasksTab as CurrentPage
+from .pages.pomodoro import PomodoroTab as CurrentPage
