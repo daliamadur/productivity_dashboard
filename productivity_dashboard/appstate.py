@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from .models import PomodoroState, Link, Task, Reminder
 from datetime import datetime
+from .base_state import BaseState
 
 @dataclass
-class AppState():
+class AppState(BaseState):
     date_time: datetime
     #quick acess links (top n (however many fit))
     links: list[Link]
