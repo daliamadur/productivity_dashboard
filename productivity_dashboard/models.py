@@ -39,6 +39,14 @@ class Period(Enum):
     MINUTES = 1
     HOURS = 60
 
+    @classmethod
+    def get_label(cls, period, value=0):
+        for member in cls:
+            if member == period:
+                name = member.name.lower()
+                return name if value != 1 else name[:-1]
+        raise ValueError(f"No matching value for {period}")
+
 class Category(Enum):
     ADMIN_SETUP = auto()
     CAREER_PRESENCE = auto()
