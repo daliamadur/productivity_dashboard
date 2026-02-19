@@ -1,30 +1,35 @@
 import customtkinter as ctk
-from ..models import Link
-from ..utils import HyperLink, create_grid, build_top_panel, build_bottom_panel, load_favicon, load_icon, callback
+from ..models import Link, Layout
+from ..utils import HyperLink, create_grid, load_favicon, load_icon, callback
 from ..CTkScrollableDropdown import ctk_scrollable_dropdown as ctk_sd
+from .page import Tab
 
-class LinksTab(ctk.CTkFrame):
-    def __init__(self, parent, name, links_list: list[Link]):
-        super().__init__(parent)
+class LinksTab(Tab):
+    def __init__(self, parent, name, links_list):
+        super().__init__(
+            parent=parent,
+            name=name,
+            state=links_list,
+            layout=Layout(
+                body_columns=[3,2]
+            )
+        )
 
-        self.data = links_list
-        create_grid(self, rows=[1,3])
+        self.state: list[Link]
 
-        self.head = build_top_panel(name, self)
-        self.body = build_bottom_panel(self, columns=[3,2])
-
+    def _build(self):
         self._build_links_list()
         self._build_settings_panel()
-
+    
     def _build_links_list(self):
         frame = ctk.CTkFrame(self.body, fg_color="transparent")
         frame.grid(column=0, row=0, sticky="nesw")
 
-        cols = len(self.data) // 10
+        cols = len(self.state) // 10
         
         create_grid(frame, rows=10, columns=cols)
         
-        for i, link in enumerate(self.data):
+        for i, link in enumerate(self.state):
             link_frame = ctk.CTkFrame(frame, fg_color="transparent")
             create_grid(link_frame, columns=2)
             link.icon
@@ -69,10 +74,10 @@ class LinksTab(ctk.CTkFrame):
         edit_link_label.grid(row=start, column=0, columnspan=2)
 
         edit_link_select.grid(row=start + 1, column=0, columnspan=2)
-        edit_link_select.set(self.data[0].name)
+        edit_link_select.set(self.state[0].name)
         
         #use command= parameter later for functionality
-        ctk_sd.CTkScrollableDropdown(edit_link_select, values=[link.name for link in self.data])
+        ctk_sd.CTkScrollableDropdown(edit_link_select, values=[link.name for link in self.state])
 
         edit_link_name_label.grid(row=start + 2, column=0)
         edit_link_name_input.grid(row=start + 2, column=1)
@@ -90,10 +95,10 @@ class LinksTab(ctk.CTkFrame):
         delete_link_label.grid(row=start, column=0, columnspan=2)
 
         delete_link_select.grid(row=start + 1, column=0, columnspan=2)
-        delete_link_select.set(self.data[0].name)
+        delete_link_select.set(self.state[0].name)
         
         #use command= parameter later for functionality
-        ctk_sd.CTkScrollableDropdown(delete_link_select, values=[link.name for link in self.data])
+        ctk_sd.CTkScrollableDropdown(delete_link_select, values=[link.name for link in self.state])
         
         delete_link_button.grid(row=start + 2, column=0, columnspan=2)
 

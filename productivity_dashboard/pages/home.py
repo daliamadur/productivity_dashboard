@@ -1,27 +1,33 @@
-from ..utils import HyperLink, create_grid, format_date, format_time, format_duration, load_icon, load_favicon, callback, build_top_panel, build_bottom_panel
+from ..utils import HyperLink, create_grid, format_date, format_time, format_duration, load_icon, load_favicon, callback
 from ..appstate import AppState
 from ..pomodoro_meter import PomodoroWheel
 import customtkinter as ctk
+from .page import Tab
+from ..models import Layout
 
-class HomeTab(ctk.CTkFrame):
-    def __init__(self, parent, name, appstate: AppState):
-        super().__init__(parent)
-        self.appstate = appstate
+class HomeTab(Tab):
+    def __init__(self, parent, name, appstate):
+        super().__init__(
+            parent=parent,
+            name=name,
+            state=appstate,
+            layout=Layout(
+                body_rows=[1, 3, 2],
+                body_columns=[1, 3, 1]
+            ))
+        
+        self.state: AppState
 
-        create_grid(self, rows=[1, 3])
-
-        self.head = build_top_panel(name, self)
-        self.body = build_bottom_panel(self, rows=[1, 3, 2], columns=[1,3,1])
-
+    def _build(self):
         self._build_date_time_column()
         self._build_pomodoro_column()
         self._build_reminder_tasks_column()
-
+    
     def _build_date_time_column(self):
-        date = ctk.CTkLabel(self.body, text=format_date(self.appstate.date_time), fg_color="transparent")
+        date = ctk.CTkLabel(self.body, text=format_date(self.state.date_time), fg_color="transparent")
         date.grid(row=0, column=0, sticky="nesw")
 
-        time = ctk.CTkLabel(self.body, text=format_time(self.appstate.date_time), fg_color="transparent")
+        time = ctk.CTkLabel(self.body, text=format_time(self.state.date_time), fg_color="transparent")
         time.grid(row=1, column=0, sticky="nesw")
 
         quick_links = ctk.CTkFrame(self.body, fg_color="transparent")
@@ -29,7 +35,7 @@ class HomeTab(ctk.CTkFrame):
 
         quick_links.grid(row=2, column=0, sticky="nesw")
 
-        for i, link in enumerate(self.appstate.links):
+        for i, link in enumerate(self.state.links):
             link_frame = ctk.CTkFrame(quick_links, fg_color="transparent", height=24)
             create_grid(link_frame, columns=2, propagate=True)
             
@@ -48,16 +54,16 @@ class HomeTab(ctk.CTkFrame):
         pomodoro_wheel = PomodoroWheel(
             pomodoro, 
             color = '#5B7DB1',
-            time = self.appstate.pomodoro.time_remaining,
-            mode = self.appstate.pomodoro.mode.label,
+            time = self.state.pomodoro.time_remaining,
+            mode = self.state.pomodoro.mode.label,
             size=pomodoro.cget('width')
             )
-        pomodoro_wheel.set_progress(self.appstate.pomodoro.time_remaining / self.appstate.pomodoro.mode.duration)
+        pomodoro_wheel.set_progress(self.state.pomodoro.time_remaining / self.state.pomodoro.mode.duration)
         pomodoro_wheel.pack()
         pomodoro.grid(row=0, column=1, rowspan=3, sticky="nesw")
 
     def _next_reminder(self, parent):
-        next_reminder = self.appstate.next_reminder
+        next_reminder = self.state.next_reminder
         
         #create frame for next reminder, place in section and split for icon + text
         upcoming_reminder = ctk.CTkFrame(parent, fg_color="transparent")
@@ -78,7 +84,7 @@ class HomeTab(ctk.CTkFrame):
         task_list.grid(row=1, column=2, rowspan=2, sticky="nsw", padx=8)
         create_grid(task_list, rows=5)
         
-        for i, task in enumerate(self.appstate.top_tasks):
+        for i, task in enumerate(self.state.top_tasks):
             checkbox = ctk.CTkCheckBox(task_list,
                                        text=task.name,
                                        border_width=2,

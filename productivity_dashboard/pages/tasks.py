@@ -1,30 +1,34 @@
 import customtkinter as ctk
-from ..utils import create_grid, build_top_panel, build_bottom_panel
-from ..models import Task
+from ..utils import create_grid
+from ..models import Task, Layout
+from .page import Tab
 
-class TasksTab(ctk.CTkFrame):
+class TasksTab(Tab):
     def __init__(self, parent, name, task_list):
-        super().__init__(parent)
+        super().__init__(
+            parent=parent,
+            name=name,
+            state=task_list,
+            layout=Layout(
+                body_columns=[3,2]
+            )
+        )
 
-        self.task_list: list[Task] = task_list
+        self.state: list[Task]
 
-        create_grid(self, rows=[1, 3])
-
-        self.head = build_top_panel(name, self)
-        self.body = build_bottom_panel(self, columns=[3,2])
-
+    def _build(self):
         self._build_task_list_column()
         self._build_add_task_column()
-
+    
     def _build_task_list_column(self):
         frame = ctk.CTkFrame(self.body, fg_color="transparent")
         frame.grid(row=0, column=0, rowspan=6, sticky="nesw", padx=16)
-        create_grid(frame, rows=len(self.task_list) + 2, columns=6)
+        create_grid(frame, rows=len(self.state) + 2, columns=6)
 
         label = ctk.CTkLabel(frame, text="Task List")
         label.grid(row=0, column=0, columnspan=6, sticky="nesw")
 
-        for i, task in enumerate(self.task_list):
+        for i, task in enumerate(self.state):
             checkbox = ctk.CTkCheckBox(frame,
                                        text=task.name,
                                        border_width=2,
@@ -49,7 +53,7 @@ class TasksTab(ctk.CTkFrame):
         ]
 
         steps = ctk.CTkFrame(frame, fg_color="#404040")
-        steps.grid(row=1, column=3, rowspan=len(self.task_list), columnspan=3, sticky="nesw")
+        steps.grid(row=1, column=3, rowspan=len(self.state), columnspan=3, sticky="nesw")
 
         create_grid(steps, rows=len(example_steps_object))
 
@@ -73,7 +77,7 @@ class TasksTab(ctk.CTkFrame):
         buttons = [clear_completed_button, reorder_button, save_button]
 
         for i, button in enumerate(buttons):
-            button.grid(row=len(self.task_list) + 1, column = i*2, columnspan=2, sticky="")
+            button.grid(row=len(self.state) + 1, column = i*2, columnspan=2, sticky="")
 
     def _build_add_task_column(self):
         frame = ctk.CTkFrame(self.body, fg_color="transparent")
@@ -94,7 +98,7 @@ class TasksTab(ctk.CTkFrame):
         steps_textarea.grid(row=3, column=0, columnspan=2, sticky="nesw")
 
         save_button = ctk.CTkButton(frame, text="Add to task list")
-        save_button.grid(row=4, column=1, sticky="")
+        save_button.grid(row=4, column=1, sticky="e")
 
         import_button_1 = ctk.CTkButton(frame, text="Import from Task Picker")
         import_button_1.grid(row=5, column=0, columnspan=2, sticky="")

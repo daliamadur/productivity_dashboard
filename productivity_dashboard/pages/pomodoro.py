@@ -1,17 +1,22 @@
 import customtkinter as ctk
-from ..utils import create_grid, format_pomodoro, build_top_panel, build_bottom_panel
-from ..appstate import AppState
+from ..utils import create_grid, format_pomodoro
+from ..appstate import AppState, PomodoroState
+from .page import Tab
+from ..models import Layout
 
-class PomodoroTab(ctk.CTkFrame):
+class PomodoroTab(Tab):
     def __init__(self, parent, name, appstate: AppState):
-        super().__init__(parent)
+        super().__init__(
+            parent=parent,
+            name=name,
+            state=appstate.pomodoro,
+            layout=Layout(
+                body_columns=[3,2]
+            ))
 
-        self.appstate = appstate.pomodoro
-        create_grid(self, rows=[1, 3])
+        self.state: PomodoroState
 
-        self.head = build_top_panel(name, self)
-        self.body = build_bottom_panel(self, columns=[3,2])
-
+    def _build(self):
         self._build_pomodoro_column()
         self._build_settings_column()
 
@@ -25,10 +30,10 @@ class PomodoroTab(ctk.CTkFrame):
         target_sessions = 8
 
         #real variables
-        mode = self.appstate.mode.label
-        remaining_time = self.appstate.time_remaining
+        mode = self.state.mode.label
+        remaining_time = self.state.time_remaining
         
-        total_time = self.appstate.mode.duration
+        total_time = self.state.mode.duration
 
         #session count
         session_count = ctk.CTkLabel(frame, text=total_sessions)
