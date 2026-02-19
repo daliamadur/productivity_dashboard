@@ -8,4 +8,4 @@ from .models import *
 from .storage import *
 
 #for testing purposes
-from .pages.links import LinksTab as CurrentPage
+from .pages.reminders import RemindersTab as CurrentPage
