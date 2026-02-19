@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 from datetime import timedelta, datetime
-from typing import Optional
+from typing import Optional, Sequence
 
 class PomodoroMode(Enum):
     WORK = ("work", 25)
@@ -68,7 +68,7 @@ class Reminder():
     name: str
     frequency: int
     period: Period
-    next: Optional[datetime]
+    next: Optional[datetime] #how much time until the next reminder (should update every minute?)
     icon: str
     alert: bool
     toast: bool
@@ -89,3 +89,9 @@ class PomodoroState():
     time_remaining: int
     mode: PomodoroMode
     status: PomodoroStatus
+
+@dataclass
+class Layout():
+    rows: Sequence[int] = (1, 3)
+    body_rows: Optional[Sequence[int]] = None
+    body_columns: Optional[Sequence[int]] = None
